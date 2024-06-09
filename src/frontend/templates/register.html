@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Register</title>
+		<link rel="stylesheet" href="../static/css/style.css">
+	</head>
+	<body>
+		<div class="register">
+			
+			<div class="links">
+				<a href="{{ url_for('login') }}">Login</a>
+				<a href="{{ url_for('register') }}" class="active">Register</a>
+			</div>
+			
+			<form action="{{ url_for('register') }}" method="post" autocomplete="off">
+				<h1 class="form-title">Register</h1>
+				<label for="type"></label>
+                    <select name="user_type" id="user_type" required>
+                        <option value="client" name = "client">Client</option>
+                        <option value="owner" name = "owner">Owner</option>
+						<option value="moderator" name = "moderator">Moderator</option>
+                    </select><br>
+
+                <label for="name">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="name" placeholder="Name" id="name" required>
+				
+				<label for="surname">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="surname" placeholder="Surname" id="surname" required>
+
+				<div></div>
+                <input type="text" id="street" name="street" placeholder="Street"><br><!--street-->
+                <input type="text" id="streetnumber" name="streetnumber" placeholder="Street Number"><br><!--streetnumber-->
+                <input type="text" id="zipcode" name="zipcode" placeholder="Zipcode"><br><!--zipcode-->
+                <input type="text" id="city" name="city" placeholder="City"><br><!--city-->
+                <input type="text" id="country" name="country" placeholder="Country"><br><!--country-->
+				
+                <label for="username">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="username" placeholder="Username" id="username" required>
+
+				<label for="password">
+					<i class="fas fa-lock"></i>
+				</label>
+				<input type="password" name="password" placeholder="Password" id="password" required>
+
+				<div class="msg">{{ msg }}</div>
+				<input type="submit" class="action-submit" value="Register">
+			</form>
+		</div>
+	</body>
+</html>

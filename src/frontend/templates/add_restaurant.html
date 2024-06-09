@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Login</title>
+		
+        <link rel="stylesheet" href="../static/css/style.css">
+            
+	</head>
+	<body>
+		<div>
+			<a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
+			
+			<form action="{{ url_for('add_restaurant') }}" method="post">
+                
+
+				<label for="restaurant_name">
+					<i class="fas fa-user"></i>
+				</label>
+				<input type="text" name="restaurant_name" placeholder="Restaurant Name" id="restaurant_name" required>
+
+                <input type="text" id="street" name="street" placeholder="Street"><br><!--street-->
+                <input type="text" id="streetnumber" name="streetnumber" placeholder="Street Number"><br><!--streetnumber-->
+                <input type="text" id="zipcode" name="zipcode" placeholder="Zipcode"><br><!--zipcode-->
+                <input type="text" id="city" name="city" placeholder="City"><br><!--city-->
+                <input type="text" id="country" name="country" placeholder="Country"><br><!--country-->
+
+                <input type="text" id="cuisine" name="cuisine" placeholder="Cuisine"><br>
+                <!-- <input type="text" id="openinghours" name="openinghours" placeholder="Opening Hours"><br> -->
+
+
+
+
+				<div class="msg">{{ msg }}</div>
+
+				<input type="submit" class="action-submit" value="ADD">
+
+				
+
+
+			</form>
+		</div>
+
+
+	</body>
+</html>

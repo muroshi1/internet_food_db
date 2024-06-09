@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>see_restaurant/client_UI</title>
+		
+        <link rel="stylesheet" href="../../static/css/style.css">
+		<style>
+			label {
+				font-size: 25px;
+				font-weight: bold;
+			}
+
+			h2 {
+				text-align: center;
+			}
+
+			h3 {
+				font-size: 30px;
+				margin-right: 10px;
+			}
+
+			h5 {
+				font-size: 30px;
+			}
+		</style>
+            
+	</head>
+	<body>
+        <h1> {{restaurant.RestaurantName}} </h1> 
+		<h2>{{restaurant.Stars}} Stars</h2>
+		<div>
+            <a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
+            <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+        </div>
+		<label>Price range : {{restaurant.PriceRange}}</label><br>
+		<label>Adress : {{adress.Street}}, {{adress.StreetNumber}}, {{adress.ZipCode}}, {{adress.City}}, {{adress.Country}}</label>
+		<div class="menu">
+			<h3>Menu :</h3>
+			{% for meal in menu %}
+			<div class="meal">
+				<h4>{{meal.MealName}} : {{meal.Price}}</h4>
+				<div class="allergens">
+					<table>
+						<thead>Allergens :</thead>
+						<tbody>
+							{% for allergen in allergens_info[meal.MealID] %}
+							<tr>
+								<td>{{ allergen.Name }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<div class="add-review">
+			<h3>Add a Review</h3>
+			<form action="{{ url_for('add_review', restaurant_id=restaurant.RestaurantID) }}" method="POST" onsubmit="return validateForm()">
+				<textarea name="comment" rows="4" cols="50" placeholder="Write your review here..." required></textarea><br>
+				<label for="stars">Rating:</label>
+				<select name="stars" id="stars" required>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select><br>
+				<label for="visit_details">Visit Details:</label>
+				<select id="visit_details_type" name="visit_details_type" required>
+					<option value="Hospitality and Service">Hospitality and Service</option>
+					<option value="Delivery">Delivery</option>
+				</select>
+				<select id="visit_details_rating" name="visit_details_rating" required>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select><br>
+				<label for="visit_date">Visit Date:</label>
+				<input type="date" id="visit_date" name="visit_date" required><br>
+				<label for="visit_hours">Visit Hours:</label>
+				<input type="text" id="visit_hours" name="visit_hours" required><br>
+				<label>Meals:</label><br>
+				<div class="meals-container">
+					{% for meal in menu %}
+						<div class="meal-item">
+							<input type="checkbox" id="meal_{{ meal.MealID }}" name="meals" value="{{ meal.MealID }}">
+							<label for="meal_{{ meal.MealID }}">{{ meal.MealName }}</label>
+						</div>
+					{% endfor %}
+				</div>
+				<label for="total_pay">Total Paid:</label>
+				<input type="number" id="total_pay" name="total_pay" required><br>
+				<label for="opinion">Opinion:</label>
+				<input type="text" id="opinion" name="opinion" required><br>
+				<input type="submit" value="Submit Review">
+			</form>
+		</div>
+
+		<script>
+		function validateForm() {
+			const type = document.getElementById('visit_details_type').value;
+			const rating = document.getElementById('visit_details_rating').value;
+			const visitDetails = `${type}: ${rating}`;
+			document.getElementById('visit_details').value = visitDetails;
+			return true;
+		}
+		</script>
+
+		<h5>Reviews :</h5>
+		{% for review in reviews %}
+		<div class="review">
+			<table>
+				<thead>{{client[review.ClientID].Name}} {{client[review.ClientID].Surname}}</thead>
+				<tbody>
+					<tr>
+						<td>Note : {{review.Stars}}</td>
+						<td>Visit Date : {{visitInfo[review.VisitInfoID].VisitDate}}e</td>
+						<td>Opinion : {{review.Opinion}}</td>
+						<td>{{visitInfo[review.VisitInfoID].Details}}</td>
+						<td>date commentaire : {{review.Date}}</td>
+						<tr>
+							<td>Meals ordered :</td>
+							{% for meal in meals_by_visit[review.VisitInfoID] %}
+								<td>{{ meal.MealName }}</td>
+							{% endfor %}
+						</tr>
+						<td>{{visitInfo[review.VisitInfoID].TotalPay}} €</td>
+						<td>hour start-end : {{visitInfo[review.VisitInfoID].VisitHours}}</td>
+					</tr>
+					<tr>
+						<td>{{review.Comment}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		{% endfor %}
+	</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>see_restaurant/client_UI</title>
+		
+        <link rel="stylesheet" href="../../static/css/style.css">
+		<style>
+			label {
+				font-size: 25px;
+				font-weight: bold;
+			}
+
+			h2 {
+				text-align: center;
+			}
+
+			h3 {
+				font-size: 30px;
+				margin-right: 10px;
+			}
+
+			h5 {
+				font-size: 30px;
+			}
+		</style>
+            
+	</head>
+	<body>
+        <h1> {{restaurant.RestaurantName}} </h1> 
+		<h2>{{restaurant.Stars}} Stars</h2>
+        <div>
+            <a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
+            <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+        </div>
+		<label>Price range : {{restaurant.PriceRange}}</label><br>
+		<label>Adress : {{adress.Street}}, {{adress.StreetNumber}}, {{adress.ZipCode}}, {{adress.City}}, {{adress.Country}}</label>
+		<div class="menu">
+			<h3>Menu :</h3>
+			{% for meal in menu %}
+			<div class="meal">
+				<h4>{{meal.MealName}} : {{meal.Price}}</h4>
+				<div class="allergens">
+					<table>
+						<thead>Allergens :</thead>
+						<tbody>
+							{% for allergen in allergens_info[meal.MealID] %}
+							<tr>
+								<td>{{ allergen.Name }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+        <!-- Button to open the add meal form -->
+        <button onclick="document.getElementById('addMealForm').style.display='block'">Add Meal</button>
+
+        <!-- Add Meal Form -->
+        <div id="addMealForm" style="display:none;">
+            <form action="{{ url_for('add_meal', restaurant_id=restaurant.RestaurantID) }}" method="POST">
+                <label for="meal_name">Meal Name:</label>
+                <input type="text" id="meal_name" name="meal_name" required>
+                <br>
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" required>
+                <br>
+                <label for="allergens">Allergens (separate by commas):</label>
+                <input type="text" id="allergens" name="allergens">
+                <br>
+                <button type="submit">Add Meal</button>
+            </form>
+        </div>
+		<h5>Reviews :</h5>
+		{% for review in reviews %}
+		<div class="review">
+			<table>
+				<thead>{{client[review.ClientID].Name}} {{client[review.ClientID].Surname}}</thead>
+				<tbody>
+					<tr>
+						<td>Note : {{review.Stars}}</td>
+						<td>Visit Date : {{visitInfo[review.VisitInfoID].VisitDate}}e</td>
+						<td>Opinion : {{review.Opinion}}</td>
+						<td>{{visitInfo[review.VisitInfoID].Details}}</td>
+						<td>date commentaire : {{review.Date}}</td>
+						<tr>
+							<td>Meals ordered :</td>
+							{% for meal in meals_by_visit[review.VisitInfoID] %}
+								<td>{{ meal.MealName }}</td>
+							{% endfor %}
+						</tr>
+						<td>{{visitInfo[review.VisitInfoID].TotalPay}} €</td>
+						<td>hour start-end : {{visitInfo[review.VisitInfoID].VisitHours}}</td>
+					</tr>
+					<tr>
+						<td>{{review.Comment}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		{% endfor %}
+	</body>
+</html>
